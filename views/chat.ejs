@@ -155,7 +155,7 @@
 
     <div
       id="incoming-call"
-      class="hidden fixed z-[222] w-full h-screen bg-gray-900 bg-opacity-75 flex items-center justify-center"
+      class="hidden fixed z-[222] w-full h-screen bg-gray-900 bg-opacity-75  items-center justify-center"
     >
       <div class="bg-white p-8 rounded-md text-center shadow-lg">
         <p class="mb-4 text-lg font-semibold text-gray-900">
@@ -264,7 +264,7 @@
 
       chatform.addEventListener("submit", function (event) {
         event.preventDefault();
-        //console.log(messagebox.value);
+        console.log(messagebox.value);
         socket.emit("message", { room: room, message: messagebox.value });
         attachMessage(messagebox.value);
         messagebox.value = ""; //blaank the input message
@@ -306,6 +306,9 @@
 
 
 function receiveMessage(message) {
+
+  //console.log("received message", message);
+  //console.trace(message)
     const messageContainer = document.createElement("div");
     messageContainer.classList.add("flex", "my-2", "justify-start");
 
@@ -350,16 +353,19 @@ function receiveMessage(message) {
 
       const initialize = async () => {
         socket.on("signalingMessage", handleSignalingMessage);
+        console.log("Initializing...");
 
         try {
           localStream = await navigator.mediaDevices.getUserMedia({
             audio: true,
             video: true,
           });
+          console.log("localstrem  is initialised");
+          console.log(localStream);
           document.querySelector("#localVideo").srcObject = localStream;
           document.querySelector("#localVideo").style.display = "block";
-
-          initiateOffer();
+          
+            initiateOffer();
 
           inCall = true;
         } catch (err) {
@@ -367,7 +373,10 @@ function receiveMessage(message) {
         }
       };
 
+
+
       const initiateOffer = async () => {
+
         await createPeerConnection();
         try {
           const offer = await peerConnection.createOffer();
@@ -385,6 +394,11 @@ function receiveMessage(message) {
       };
 
       const createPeerConnection = () => {
+        if (!localStream) {
+        console.error("localStream is not defined.");
+        return;
+    }
+
         peerConnection = new RTCPeerConnection(rtcSettings);
 
         remoteStream = new MediaStream();
@@ -393,15 +407,37 @@ function receiveMessage(message) {
         document.querySelector("#remoteVideo").style.display = "block";
         document.querySelector("#localVideo").classList.add("smallFrame");
 
+
+
         localStream.getTracks().forEach((track) => {
-          peerConnection.addTrack(track, localStream);
-        });
+    if (track) {
+        peerConnection.addTrack(track, localStream);
+    } else {
+        console.error("Track is undefined.");
+    }
+});
+
+        // localStream.getTracks().forEach((track) => {
+        //   //console.log(localStream);
+        //   peerConnection.addTrack(track, localStream);
+        // });
 
         peerConnection.ontrack = (event) => {
-          event.streams[0].getTracks().forEach((track) => {
+
+          if (event.streams[0]) {
+        event.streams[0].getTracks().forEach((track) => {
             remoteStream.addTrack(track);
-          });
+        });
+    } else {
+        console.error("Received undefined stream in ontrack event:", event);
+    }
+
+          // event.streams[0].getTracks().forEach((track) => {
+          //   remoteStream.addTrack(track); 
+          // });
         };
+
+        //handle ice candiadtes
 
         peerConnection.onicecandidate = (event) => {
           if (event.candidate) {
@@ -417,9 +453,11 @@ function receiveMessage(message) {
           }
         };
 
+      //  log connection to state changes
+
         peerConnection.onconnectionstatechange = () => {
           console.log(
-            "connection state change hui ",
+            "connection state changed ",
             peerConnection.connectionState
           );
         };
@@ -468,6 +506,7 @@ function receiveMessage(message) {
       document
         .querySelector("#video-call-btn")
         .addEventListener("click", function () {
+          //alert("hey")
           socket.emit("startVideoCall", { room });
         });
 

@@ -10,6 +10,8 @@ const { Console } = require("console");
 const server = http.createServer(app);
 const io = socketIO(server);
 
+
+
 let waitingUsers = [];
 let rooms = {};
 
@@ -28,10 +30,8 @@ io.on("connection", function (socket) {
     }
   });
 
-  // socket.on("message" , function(data){
-  //     socket.broadcast.to(data.room).emit("message", data.message);
+  
 
-  // });
   // When a client sends a message
   socket.on("message", function (data) {
     //console.log(`Server received message: ${data.message} for room: ${data.room}`);
@@ -80,4 +80,6 @@ app.use("/chat", chatRouter);
 //     res.render('chat'); // This renders the chat.ejs file
 //   });
 
-server.listen(3000);
+server.listen(3000 , ()=>{
+  console.log("server is listening at port 3000")
+});
