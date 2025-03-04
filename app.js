@@ -1,22 +1,25 @@
+// Express: Web application framework for Node.js
 const express = require("express");
 const app = express();
 const path = require("path");
 const indexRouter = require("./routes/index");
 const chatRouter = require("./routes/chat");
-
 const http = require("http");
 const socketIO = require("socket.io");
-const { Console } = require("console");
+
+// Create server instance
 const server = http.createServer(app);
 const io = socketIO(server);
 
-
-
+// Lists to keep track of users and chat rooms
 let waitingUsers = [];
 let rooms = {};
 
+// Socket.IO event handlers
 io.on("connection", function (socket) {
+  // When someone wants to chat
   socket.on("joinroom", function () {
+    // If someone is already waiting, connect them together
     if (waitingUsers.length > 0) {
       let partner = waitingUsers.shift();
       const roomname = `${socket.id}-${partner.id}`;
@@ -26,38 +29,41 @@ io.on("connection", function (socket) {
 
       io.to(roomname).emit("joined", roomname);
     } else {
+      // Otherwise, add them to waiting list
       waitingUsers.push(socket);
     }
   });
 
-  
-
-  // When a client sends a message
+  // When someone sends a message
   socket.on("message", function (data) {
-    //console.log(`Server received message: ${data.message} for room: ${data.room}`);
-
-    // Emit the message to all clients in the specified room
-    //io.to(data.room).emit("message", data.message);
-    // To exclude the sender, use:
+    // Send the message to the other person in the room
     socket.broadcast.to(data.room).emit("message", data.message);
   });
 
+  // Video call related functions
+  // Handle WebRTC signaling messages
   socket.on("signalingMessage", function (data) {
     socket.broadcast.to(data.room).emit("signalingMessage", data.message);
   });
+
+  // Handle video call initialization
   socket.on("startVideoCall", function ({ room }) {
     socket.broadcast.to(room).emit("incomingCall");
   });
 
+  // Handle call acceptance
   socket.on("acceptCall", function ({ room }) {
     socket.broadcast.to(room).emit("callAceepted");
   });
 
+  // Handle call rejection
   socket.on("rejectCall", function ({ room }) {
     socket.broadcast.to(room).emit("callRejected");
   });
 
+  // When someone disconnects
   socket.on("disconnect", function () {
+    // Remove them from waiting list if they were waiting
     let index = waitingUsers.findIndex(
       (waitingUsers) => waitingUsers.id === socket.id
     );
@@ -65,21 +71,20 @@ io.on("connection", function (socket) {
   });
 });
 
+// Express Middleware Configuration
+// Set EJS as the template engine for rendering views
 app.set("view engine", "ejs");
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, "public")));
 
-// app.set('views', path.join(__dirname, 'views'));
+// Express built-in middleware
+app.use(express.json()); // Parse JSON payloads
+app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
+app.use(express.static(path.join(__dirname, "public"))); // Serve static files
 
+// Set up our web pages
 app.use("/", indexRouter);
-
 app.use("/chat", chatRouter);
 
-// app.get('/chat', (req, res) => {
-//     res.render('chat'); // This renders the chat.ejs file
-//   });
-
-server.listen(3000 , ()=>{
-  console.log("server is listening at port 3000")
+// Start the server on port 3000
+server.listen(3000, () => {
+  console.log("server is listening at port 3000");
 });
