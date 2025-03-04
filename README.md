@@ -265,7 +265,7 @@ This process allows continuous, low-latency communication between clients withou
 - **Problem**: If both clients are behind restrictive NATs, direct communication may fail.
 - **Solution**: Use STUN to discover public IP addresses, or TURN to relay media via a server.
 
-![NAT-](image.png)
+![NAT-](NAT.png)
 
 
 ### Summary of the Flow
