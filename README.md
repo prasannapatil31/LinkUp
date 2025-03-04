@@ -21,7 +21,7 @@ Before implementing sockets, developers relied on inefficient methods to maintai
 
 Sockets solve these issues by enabling real-time, bidirectional communication with minimal overhead.
 
-# Problems Solved by WebSockets (2010-2011)
+# Problems Solved by WebSockets 
 
 WebSockets were introduced to address these limitations by providing a full-duplex, bidirectional communication channel over a single TCP connection. Here’s how WebSockets solve these issues:
 
