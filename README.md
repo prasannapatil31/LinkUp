@@ -136,6 +136,8 @@ WebSockets provide a full-duplex communication channel between the client and se
 
 ## **How WebSocket Connection Happens**
 
+![ws-](websocket.png)
+
 1. **Client-Side Initiation:**
 
    - The client creates a WebSocket connection using `const socket = io();`
@@ -266,7 +268,6 @@ This process allows continuous, low-latency communication between clients withou
 - **Solution**: Use STUN to discover public IP addresses, or TURN to relay media via a server.
 
 ![NAT-](NAT.png)
-
 
 ### Summary of the Flow
 
