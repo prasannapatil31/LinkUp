@@ -136,7 +136,7 @@ WebSockets provide a full-duplex communication channel between the client and se
 
 ## **How WebSocket Connection Happens**
 
-![ws-](websocket.png)
+![ws-](/images/websocket.png)
 
 1. **Client-Side Initiation:**
 
@@ -177,8 +177,7 @@ This process allows continuous, low-latency communication between clients withou
 # WebRTC (Web Real-Time Communication)
 
 ### Simulation of WebRTC Communication
-![webrtc-](webrtc.png)
-
+![webrtc-](/images/webrtc.png)
 #### Initial Setup
 
 - **Server**: Listens for signaling messages from clients (like offers, answers, ICE candidates).
@@ -268,7 +267,7 @@ This process allows continuous, low-latency communication between clients withou
 - **Problem**: If both clients are behind restrictive NATs, direct communication may fail.
 - **Solution**: Use STUN to discover public IP addresses, or TURN to relay media via a server.
 
-![NAT-](NAT.png)
+![NAT-](/images/NAT.png)
 
 ### Summary of the Flow
 
