@@ -177,6 +177,7 @@ This process allows continuous, low-latency communication between clients withou
 # WebRTC (Web Real-Time Communication)
 
 ### Simulation of WebRTC Communication
+![webrtc-](webrtc.png)
 
 #### Initial Setup
 
