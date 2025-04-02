@@ -1,4 +1,5 @@
 # LinkUp
+A real-time chat and video calling web app.
 
 # Problems Before Using Sockets
 
