@@ -70,16 +70,6 @@ A **socket** is an endpoint for sending and receiving data across a network.
 
 **Socket.IO** is an npm library that builds on WebSockets to simplify real-time communication between clients and servers.
 
-## WebSocket and TCP/IP
-
-WebSockets rely on **TCP/IP** for data transmission:
-
-- **TCP/IP Layer:** WebSockets operate at the application layer of the OSI model but use TCP at the transport layer, ensuring reliable and ordered data transmission.
-- **Handshake:** WebSockets start with an HTTP handshake, upgrading to WebSocket protocol if supported. Once established, communication shifts from HTTP to WebSocket over the existing TCP connection.
-- **Full-Duplex Communication:** WebSockets allow both client and server to exchange messages independently, enabling real-time applications like chat, live updates, and collaborative tools.
-
-**Note:** WebSockets rely on TCP/IP to ensure efficient and reliable data transmission.
-
 # WebSocket and Networking
 
 ## Socket in Networking
