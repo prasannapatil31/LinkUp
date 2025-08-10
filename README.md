@@ -60,15 +60,7 @@ WebSockets are widely used where real-time, low-latency communication is essenti
 - **Live data feeds:** Streaming stock prices, sports scores, or news updates.
 - **Collaborative tools:** Multiple users working together on shared documents or drawings simultaneously.
 
-# WebSocket and Networking
 
-## Socket in Networking
-
-A **socket** is an endpoint for sending and receiving data across a network.
-
-## Socket.IO
-
-**Socket.IO** is an npm library that builds on WebSockets to simplify real-time communication between clients and servers.
 
 # WebSocket and Networking
 
